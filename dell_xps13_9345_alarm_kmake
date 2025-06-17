@@ -1,0 +1,12 @@
+LINUX		:= $(PWD)
+ARCH		:= arm64
+J		:= 32
+CROSS_COMPILE	:= clangd
+LLVM		:= 1
+NOTIFY_CMD	:= echo
+ALL_TARGETS	:= pacman-pkg
+MAKEPKGOPTS	:= -d
+
+export MAKEPKGOPTS
+export PACMAN_PKGBASE=linux-mainline
+export LLVM
