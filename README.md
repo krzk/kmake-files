@@ -12,6 +12,7 @@ First, make sure you have Kieran's kmake installed.
 Then, just copy (or symlink) the prefered kmake file to your kernel tree.
 
 ```
+echo "INITRD=${HOME}/your-favorite-ramdisk.cpio.gz" > ~/.kmake
 cd kmake-files;
 ln -s <preferred kmake> <kernel tree>/kmake
 ```
