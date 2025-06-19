@@ -8,24 +8,18 @@ NOTIFY_CMD	:= echo
 ALL_TARGETS	:= mkbootimg
 
 DEFCONFIG	:= defconfig
-CONFIG_EXT	:= yes
 ROOT		:= "PARTLABEL=rootfs"
 KARGS		:= " root=$(ROOT) rootwait=2 rw earlycon console=ttyMSM0,115200n8 no_console_suspend cma=128M init=/sbin/init copy_modules ignore_loglevel pd_ignore_unused clk_ignore_unused regulator_ignore_unused "
 IMAGE		:= arch/arm64/boot/Image
 DTB		:= arch/arm64/boot/dts/qcom/sm8750-mtp.dtb
 
 # fastrpc:
-CONFIG_ADD	= DMABUF_HEAPS DMABUF_HEAPS_SYSTEM DMABUF_HEAPS_CMA
+CONFIG_ENABLE	= DMABUF_HEAPS DMABUF_HEAPS_SYSTEM DMABUF_HEAPS_CMA
 # Display:
-CONFIG_ADD	+= SM_DISPCC_8750 DRM_PANEL_NOVATEK_NT37801
+CONFIG_ENABLE	+= SM_DISPCC_8750 DRM_PANEL_NOVATEK_NT37801
 
 include $(KMAKE_FILES_DIR)/ramdisk.mk
 include $(KMAKE_FILES_DIR)/config-strip.mk
-
-config_ext: config_strip
-	for item in $(CONFIG_ADD) ; do \
-		scripts/config --file $(BUILD).config -k -e "$$item" ; \
-	done
 
 mkbootimg: ramdisk
 	@echo "Building $(BUILD)boot.img"
