@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: GPL-2.0
+KMAKE_FILE	:= $(shell realpath -e $(PWD)/kmake)
+KMAKE_FILES_DIR	:= $(shell dirname $(KMAKE_FILE))
+LINUX		:= $(PWD)
+ARCH		:= arm64
+CROSS_COMPILE	:= ccache aarch64-linux-gnu-
+NOTIFY_CMD	:= echo
+ALL_TARGETS	:= mkbootimg
+
+DEFCONFIG	:= defconfig
+ROOT		:= "PARTLABEL=rootfs"
+KARGS		:= " root=$(ROOT) rootwait=2 rw earlycon console=ttyMSM0,115200n8 no_console_suspend cma=128M init=/sbin/init copy_modules ignore_loglevel pd_ignore_unused clk_ignore_unused regulator_ignore_unused "
+IMAGE		:= arch/arm64/boot/Image
+DTB		:= arch/arm64/boot/dts/qcom/sm8750-mtp.dtb
+
+include $(KMAKE_FILES_DIR)/ramdisk.mk
+
+mkbootimg: ramdisk
+	@echo "Building $(BUILD)boot.img"
+	@echo "	DTB	: $(BUILD)$(DTB)"
+	@echo "	Image	: $(BUILD)$(IMAGE)"
+	@echo "	initrd	: $(INITRD)"
+	@echo "	cmdline	: $(KARGS)"
+	@echo "	commit  : "`git describe`
+
+	@mkbootimg 	--kernel $(BUILD)$(IMAGE) \
+			--header_version 2 \
+			--dtb $(BUILD)$(DTB) \
+			--cmdline $(KARGS) \
+			--ramdisk $(BUILD)ramdisk.cpio.gz \
+			--base 0x80000000 \
+			--pagesize 2048 \
+			--output $(BUILD)boot.img
