@@ -1,7 +1,7 @@
 # KMake Files
 The Kernel Maker local targets files
 
-These are to be used with Kieran's [KMake](https://github.com/kbingham/kmake_).
+These are to be used with Kieran's [KMake](https://github.com/kbingham/kmake).
 
 Make sure you understand what Kieran's tool does before moving forward.
 
