@@ -2,9 +2,7 @@
 
 modules_cpio_gz: dir-pkg
 	@echo Building $(BUILD)modules.cpio.gz
-	@mkdir -p $(BUILD)tar-install/usr/
-	@mv $(BUILD)tar-install/lib $(BUILD)tar-install/usr/lib
-	@cd $(BUILD)tar-install/; find usr | cpio -o -H newc -R +0:+0 |gzip -c > $(BUILD)modules.cpio.gz
+	@cd $(BUILD)tar-install/; find lib | cpio -o -H newc -R +0:+0 | gzip -c > $(BUILD)modules.cpio.gz
 	@cd -
 
 ramdisk: modules_cpio_gz
