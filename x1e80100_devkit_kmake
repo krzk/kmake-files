@@ -14,32 +14,32 @@ DTB		:= arch/arm64/boot/dts/qcom/x1e001de-devkit.dtb
 INITRD		:= /home/abel/repos/linaro-boot/initrd.built.cpio.gz
 
 modules_cpio_gz: dir-pkg
-	@echo Building $(BUILD)/modules.cpio.gz
-	@mkdir -p $(BUILD)/tar-install/usr/
-	@mv $(BUILD)/tar-install/lib $(BUILD)/tar-install/usr/lib
-	@cd $(BUILD)/tar-install/; find usr | cpio -o -H newc -R +0:+0 |gzip -c > $(BUILD)/modules.cpio.gz
+	@echo Building $(BUILD)modules.cpio.gz
+	@mkdir -p $(BUILD)tar-install/usr/
+	@mv $(BUILD)tar-install/lib $(BUILD)/tar-install/usr/lib
+	@cd $(BUILD)tar-install/; find usr | cpio -o -H newc -R +0:+0 |gzip -c > $(BUILD)modules.cpio.gz
 	@cd -
 
 ramdisk: modules_cpio_gz
 	@echo Appending modules.cpio.gz to final ramdisk
-	@cat $(INITRD)	$(BUILD)/modules.cpio.gz \
+	@cat $(INITRD)	$(BUILD)modules.cpio.gz \
 			/home/abel/repos/linaro-boot/copy_modules_scripts.cpio.gz \
 			/home/abel/repos/linaro-boot/firmware.cpio.gz \
-			> $(BUILD)/ramdisk.cpio.gz;
+			> $(BUILD)ramdisk.cpio.gz;
 
 mkbootimg: ramdisk
-	@echo "Building $(BUILD)/boot.img"
-	@echo "	DTB	: $(BUILD)/$(DTB)"
-	@echo "	Image	: $(BUILD)/$(IMAGE)"
+	@echo "Building $(BUILD)boot.img"
+	@echo "	DTB	: $(BUILD)$(DTB)"
+	@echo "	Image	: $(BUILD)$(IMAGE)"
 	@echo "	initrd	: $(INITRD)"
 	@echo "	cmdline	: $(KARGS)"
 	@echo "	commit  : "`git describe`
 
-	@mkbootimg 	--kernel $(BUILD)/$(IMAGE) \
+	@mkbootimg 	--kernel $(BUILD)$(IMAGE) \
 			--header_version 2 \
-			--dtb $(BUILD)/$(DTB) \
+			--dtb $(BUILD)$(DTB) \
 			--cmdline $(KARGS) \
-			--ramdisk $(BUILD)/ramdisk.cpio.gz \
+			--ramdisk $(BUILD)ramdisk.cpio.gz \
 			--base 0x80000000 \
 			--pagesize 2048 \
-			--output $(BUILD)/boot.img
+			--output $(BUILD)boot.img
