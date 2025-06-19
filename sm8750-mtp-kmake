@@ -14,10 +14,18 @@ KARGS		:= " root=$(ROOT) rootwait=2 rw earlycon console=ttyMSM0,115200n8 no_cons
 IMAGE		:= arch/arm64/boot/Image
 DTB		:= arch/arm64/boot/dts/qcom/sm8750-mtp.dtb
 
+# fastrpc:
+CONFIG_ADD	= DMABUF_HEAPS DMABUF_HEAPS_SYSTEM DMABUF_HEAPS_CMA
+# Display:
+CONFIG_ADD	+= SM_DISPCC_8750 DRM_PANEL_NOVATEK_NT37801
+
 include $(KMAKE_FILES_DIR)/ramdisk.mk
 include $(KMAKE_FILES_DIR)/config-strip.mk
 
 config_ext: config_strip
+	for item in $(CONFIG_ADD) ; do \
+		scripts/config --file $(BUILD).config -k -e "$$item" ; \
+	done
 
 mkbootimg: ramdisk
 	@echo "Building $(BUILD)boot.img"
