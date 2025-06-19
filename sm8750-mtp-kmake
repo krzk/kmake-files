@@ -35,7 +35,7 @@ mkbootimg: ramdisk
 			--cmdline $(KARGS) \
 			--ramdisk $(BUILD)ramdisk.cpio.gz \
 			--base 0x80000000 \
-			--pagesize 2048 \
+			--pagesize 4096 \
 			--output $(BUILD)boot.img
 
 	@echo "	fastboot set_active a && fastboot boot $(BUILD)boot.img"
