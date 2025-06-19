@@ -8,12 +8,16 @@ NOTIFY_CMD	:= echo
 ALL_TARGETS	:= mkbootimg
 
 DEFCONFIG	:= defconfig
+CONFIG_EXT	:= yes
 ROOT		:= "PARTLABEL=rootfs"
 KARGS		:= " root=$(ROOT) rootwait=2 rw earlycon console=ttyMSM0,115200n8 no_console_suspend cma=128M init=/sbin/init copy_modules ignore_loglevel pd_ignore_unused clk_ignore_unused regulator_ignore_unused "
 IMAGE		:= arch/arm64/boot/Image
 DTB		:= arch/arm64/boot/dts/qcom/sm8750-mtp.dtb
 
 include $(KMAKE_FILES_DIR)/ramdisk.mk
+include $(KMAKE_FILES_DIR)/config-strip.mk
+
+config_ext: config_strip
 
 mkbootimg: ramdisk
 	@echo "Building $(BUILD)boot.img"
